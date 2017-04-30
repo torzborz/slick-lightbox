@@ -38,20 +38,33 @@
         SlickLightbox.prototype.createModalItems = function () {
             /* Creates individual slides to be used with slick. If `options.images` array is specified, it uses it's contents, otherwise loops through elements' `options.itemSelector`. */
             var $items, createItem, itemTemplate, length, links;
-            itemTemplate = function (source, lazy, lazyPlaceholder) {
-                var imgSourceParams;
-                lazyPlaceholder = lazyPlaceholder || 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-                if (lazy === true) {
+            itemTemplate = function (source, siht, caption) {
+                var imgSourceParams, lazyPlaceholder;
+                if (caption == null) {
+                    caption = '';
+                }
+                if (Object.prototype.toString.call(source) === '[object Object]') {
+                    source = source.src;
+                }
+                lazyPlaceholder = siht.options.lazyPlaceholder || 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+                if (siht.options.lazy === true) {
                     imgSourceParams = ' data-lazy="' + source + '" src="' + lazyPlaceholder + '" ';
                 } else {
                     imgSourceParams = ' src="' + source + '" ';
                 }
-                return '<div class="slick-lightbox-slick-item"><div class="slick-lightbox-slick-item-inner"><img class="slick-lightbox-slick-img" ' + imgSourceParams + ' /></div></div>';
+                return '<div class="slick-lightbox-slick-item"><div class="slick-lightbox-slick-item-inner"><img class="slick-lightbox-slick-img" ' + imgSourceParams + ' />' + caption + '</div></div>';
             };
             if (this.options.images) {
-                links = $.map(this.options.images, function (img) {
-                    return itemTemplate(img, this.options.lazy, this.options.lazyPlaceholder);
-                });
+                createItem = function (_this) {
+                    return function (el, index) {
+                        var caption;
+                        if (el.caption) {
+                            caption = '<span class="slick-lightbox-slick-caption">' + el.caption + '</span>';
+                        }
+                        return itemTemplate(el, _this, caption);
+                    };
+                }(this);
+                links = $.map(this.options.images, createItem);
             } else {
                 $items = this.filterOutSlickClones(this.$element.find(this.options.itemSelector));
                 length = $items.length;
@@ -64,7 +77,7 @@
                         };
                         caption = _this.getElementCaption(el, info);
                         src = _this.getElementSrc(el);
-                        return itemTemplate(src, _this.options.lazy, _this.options.lazyPlaceholder);
+                        return itemTemplate(src, _this, caption);
                     };
                 }(this);
                 links = $.map($items, createItem);

@@ -41,17 +41,23 @@ class SlickLightbox
   createModalItems: ->
     ### Creates individual slides to be used with slick. If `options.images` array is specified, it uses it's contents, otherwise loops through elements' `options.itemSelector`. ###
     # lazyPlaceholder = @options.lazyPlaceholder || 
-    itemTemplate = (source, lazy, lazyPlaceholder) ->
-      lazyPlaceholder = lazyPlaceholder || 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
-      if lazy == true
+    itemTemplate = (source, siht, caption = '') ->
+      if Object.prototype.toString.call(source) is '[object Object]'
+        source = source.src
+      lazyPlaceholder = siht.options.lazyPlaceholder || 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
+      if siht.options.lazy == true
         imgSourceParams = """ data-lazy="#{ source }" src="#{ lazyPlaceholder }" """
       else
         imgSourceParams = """ src="#{ source }" """
-      """<div class="slick-lightbox-slick-item"><div class="slick-lightbox-slick-item-inner"><img class="slick-lightbox-slick-img" #{ imgSourceParams } /></div></div>"""
+      """<div class="slick-lightbox-slick-item"><div class="slick-lightbox-slick-item-inner"><img class="slick-lightbox-slick-img" #{ imgSourceParams } />#{ caption }</div></div>"""
 
     if @options.images
-      links = $.map @options.images, (img) ->
-        itemTemplate(img, @options.lazy, @options.lazyPlaceholder)
+      createItem = (el, index) =>
+        if el.caption
+          caption = """<span class="slick-lightbox-slick-caption">#{ el.caption }</span>"""
+        itemTemplate(el, this, caption)
+
+      links = $.map @options.images, createItem
 
     else
       $items = @filterOutSlickClones @$element.find(@options.itemSelector)
@@ -63,7 +69,7 @@ class SlickLightbox
           length: length
         caption = @getElementCaption(el, info)
         src = @getElementSrc(el)
-        itemTemplate(src, @options.lazy, @options.lazyPlaceholder)
+        itemTemplate(src, this, caption)
 
       links = $.map $items, createItem
     links
