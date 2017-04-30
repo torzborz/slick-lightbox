@@ -111,6 +111,48 @@
   });
 &lt;/script&gt;</code></pre>
 
+      <h2 id="images">Array of images with caption</h2>
+      <div class="row" id="images-caption-demo">
+        <div class="col-xs-12" style="text-align: center; margin-bottom: 20px;"><a class="btn btn-primary" href="#">Open lightbox</a></div>
+      </div>
+      <script type="text/javascript">
+        $('#images-caption-demo').slickLightbox({
+          images: [
+            {
+              src: 'http://placekitten.com/1000/600',
+              caption: 'Array item content with caption…'
+            },
+            {
+              src: 'http://placekitten.com/1010/606',  
+            },
+            {
+              src: 'http://placekitten.com/1060/636',
+              caption: 'Previous item has no caption!'
+            }
+          ]
+        });
+      </script>
+      <pre><code class="lang-html">&lt;div class=&quot;row&quot; id=&quot;images-demo&quot;&gt;
+  &lt;div class=&quot;col-xs-12&quot; style=&quot;text-align: center; margin-bottom: 20px;&quot;&gt;&lt;a class=&quot;btn btn-primary&quot; href=&quot;#&quot;&gt;Open lightbox&lt;/a&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+  $(&#039;#images-demo&#039;).slickLightbox({
+    images: [
+      {
+        src: &#039;http://placekitten.com/1000/600&#039;,
+        caption: &#039;Array item content with caption…&#039;
+      },
+      {
+        src: &#039;http://placekitten.com/1010/606&#039;,
+      },
+      {
+        src: &#039;http://placekitten.com/1060/636&#039;,
+        caption: &#039;Previous item has no caption!&#039;
+      }
+    ]
+  });
+&lt;/script&gt;</code></pre>
+
       <h2 id="slick">Existing slick</h2>
       <div id="slick-demo">
         <div class="item"><img src="http://placekitten.com/1000/600" alt="" width="480" height="300"></div>
